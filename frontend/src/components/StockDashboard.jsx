@@ -67,21 +67,21 @@ const StocksDashboard = () => {
 
   // Helper for percentage color
   const getChangeColor = (val) => {
-    if (!val) return 'text-gray-400';
-    return val.includes('-') ? 'text-red-400' : 'text-green-400';
+    if (!val) return 'text-gray-500';
+    return val.includes('-') ? 'text-red-500' : 'text-green-500';
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100 p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-white text-gray-900 p-4 md:p-8 font-sans">
       {/* --- HEADER --- */}
       <div className="max-w-7xl mx-auto space-y-6">
-        <header className="flex flex-col md:flex-row justify-between items-center border-b border-gray-800 pb-6">
+        <header className="flex flex-col md:flex-row justify-between items-center border-b border-gray-200 pb-6">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent flex items-center gap-2">
-              <Activity className="text-blue-400" />
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex items-center gap-2">
+              <Activity className="text-blue-600" />
               DashBoard
             </h1>
-            <p className="text-gray-500 text-sm mt-1">Multi-Model Stock Prediction Engine</p>
+            <p className="text-gray-600 text-sm mt-1">Multi-Model Stock Prediction Engine</p>
           </div>
 
           <div className="flex items-center gap-4 mt-4 md:mt-0">
@@ -91,12 +91,12 @@ const StocksDashboard = () => {
                 Updated: {lastUpdated.toLocaleTimeString()}
               </span>
             )}
-            <div className={`h-2 w-2 rounded-full ${loading ? 'bg-yellow-400 animate-pulse' : error ? 'bg-red-500' : 'bg-green-500'}`}></div>
+            <div className={`h-2 w-2 rounded-full ${loading ? 'bg-yellow-500 animate-pulse' : error ? 'bg-red-500' : 'bg-green-500'}`}></div>
           </div>
         </header>
 
         {/* --- CONTROLS --- */}
-        <div className="bg-gray-900 p-4 rounded-xl border border-gray-800 flex flex-col md:flex-row gap-4 justify-between items-center shadow-lg">
+        <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 flex flex-col md:flex-row gap-4 justify-between items-center shadow-sm">
 
           {/* Search */}
           <div className="relative w-full md:w-64">
@@ -105,14 +105,14 @@ const StocksDashboard = () => {
               value={symbol}
               onChange={(e) => setSymbol(e.target.value.toUpperCase())}
               onKeyDown={(e) => e.key === 'Enter' && fetchStockData()}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-500"
+              className="w-full bg-white border border-gray-300 rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-400"
               placeholder="Enter Symbol (e.g. BTC-USD)"
             />
-            <Search className="absolute left-3 top-2.5 text-gray-500" size={18} />
+            <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
           </div>
 
           {/* Timeframe Selector */}
-          <div className="flex bg-gray-800 rounded-lg p-1 overflow-x-auto">
+          <div className="flex bg-white rounded-lg p-1 overflow-x-auto border border-gray-200">
             {timeframes.map((tf) => (
               <button
                 key={tf.value}
@@ -120,7 +120,7 @@ const StocksDashboard = () => {
                 className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap ${
                   interval === tf.value
                     ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-700'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                 }`}
               >
                 {tf.label}
@@ -141,7 +141,7 @@ const StocksDashboard = () => {
 
         {/* --- ERROR MESSAGE --- */}
         {error && (
-          <div className="bg-red-900/20 border border-red-800 text-red-200 p-4 rounded-lg flex items-center gap-3">
+          <div className="bg-red-50 border border-red-300 text-red-700 p-4 rounded-lg flex items-center gap-3">
             <AlertCircle size={20} />
             {error}
           </div>
@@ -155,15 +155,15 @@ const StocksDashboard = () => {
             <div className="lg:col-span-2 space-y-6">
 
               {/* Chart Card */}
-              <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 shadow-xl">
+              <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-lg">
                 <div className="flex justify-between items-center mb-6">
                   <div>
-                    <h2 className="text-xl font-bold text-white">{stockData.symbol} Price Action</h2>
+                    <h2 className="text-xl font-bold text-gray-900">{stockData.symbol} Price Action</h2>
                     <p className="text-gray-500 text-sm">Historical Data & Moving Averages</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-bold text-white">{formatPrice(prediction.current_price)}</p>
-                    <p className={`text-sm font-medium ${prediction.direction === 'UP' ? 'text-green-400' : 'text-red-400'}`}>
+                    <p className="text-2xl font-bold text-gray-900">{formatPrice(prediction.current_price)}</p>
+                    <p className={`text-sm font-medium ${prediction.direction === 'UP' ? 'text-green-600' : 'text-red-600'}`}>
                       {prediction.direction === 'UP' ? '+' : ''}{prediction.expected_change_pct}
                     </p>
                   </div>
@@ -178,7 +178,7 @@ const StocksDashboard = () => {
                           <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" vertical={false} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
                       <XAxis
                         dataKey="date"
                         stroke="#6b7280"
@@ -195,8 +195,8 @@ const StocksDashboard = () => {
                         tickFormatter={(number) => `$${number.toFixed(0)}`}
                       />
                       <Tooltip
-                        contentStyle={{ backgroundColor: '#111827', borderColor: '#374151', color: '#f3f4f6' }}
-                        itemStyle={{ color: '#e5e7eb' }}
+                        contentStyle={{ backgroundColor: '#ffffff', borderColor: '#d1d5db', color: '#111827' }}
+                        itemStyle={{ color: '#374151' }}
                         labelFormatter={(label) => new Date(label).toLocaleString()}
                       />
                       <Area
@@ -217,15 +217,15 @@ const StocksDashboard = () => {
 
               {/* Technical Indicators Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-gray-900 p-4 rounded-xl border border-gray-800">
+                <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                   <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">RSI (14)</p>
                   <div className="flex justify-between items-end">
-                    <span className="text-2xl font-bold text-white">
+                    <span className="text-2xl font-bold text-gray-900">
                       {stockData.data[stockData.data.length - 1].rsi?.toFixed(2) || 'N/A'}
                     </span>
                     <BarChart2 className="text-purple-500 opacity-50" />
                   </div>
-                  <div className="w-full bg-gray-800 h-1.5 mt-2 rounded-full overflow-hidden">
+                  <div className="w-full bg-gray-200 h-1.5 mt-2 rounded-full overflow-hidden">
                     <div
                       className="bg-purple-500 h-full"
                       style={{ width: `${stockData.data[stockData.data.length - 1].rsi || 0}%` }}
@@ -233,19 +233,19 @@ const StocksDashboard = () => {
                   </div>
                 </div>
 
-                <div className="bg-gray-900 p-4 rounded-xl border border-gray-800">
+                <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                   <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">MACD</p>
                   <div className="flex justify-between items-end">
-                    <span className={`text-2xl font-bold ${stockData.data[stockData.data.length - 1].macd > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    <span className={`text-2xl font-bold ${stockData.data[stockData.data.length - 1].macd > 0 ? 'text-green-600' : 'text-red-600'}`}>
                       {stockData.data[stockData.data.length - 1].macd?.toFixed(4) || 'N/A'}
                     </span>
                     <Activity className="text-blue-500 opacity-50" />
                   </div>
                 </div>
 
-                <div className="bg-gray-900 p-4 rounded-xl border border-gray-800">
+                <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                   <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">Volume</p>
-                  <span className="text-xl font-bold text-white block truncate">
+                  <span className="text-xl font-bold text-gray-900 block truncate">
                     {new Intl.NumberFormat('en-US', { notation: "compact", compactDisplay: "short" }).format(stockData.data[stockData.data.length - 1].volume)}
                   </span>
                 </div>
@@ -256,53 +256,53 @@ const StocksDashboard = () => {
             <div className="space-y-6">
 
               {/* Prediction Card */}
-              <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl border border-gray-700 p-6 shadow-2xl relative overflow-hidden">
+              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-300 p-6 shadow-xl relative overflow-hidden">
                 <div className={`absolute top-0 left-0 w-1 h-full ${prediction.direction === 'UP' ? 'bg-green-500' : 'bg-red-500'}`}></div>
 
-                <h3 className="text-lg font-semibold text-gray-300 mb-4 flex items-center gap-2">
-                  <Zap className="text-yellow-400" size={20} />
+                <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
+                  <Zap className="text-yellow-500" size={20} />
                   AI Forecast (Next Candle)
                 </h3>
 
                 <div className="flex items-center gap-4 mb-6">
-                  <div className={`p-3 rounded-full ${prediction.direction === 'UP' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                  <div className={`p-3 rounded-full ${prediction.direction === 'UP' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
                     {prediction.direction === 'UP' ? <TrendingUp size={32} /> : <TrendingDown size={32} />}
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm">Predicted Close</p>
-                    <p className="text-3xl font-bold text-white">{formatPrice(prediction.predicted_next_close)}</p>
+                    <p className="text-gray-600 text-sm">Predicted Close</p>
+                    <p className="text-3xl font-bold text-gray-900">{formatPrice(prediction.predicted_next_close)}</p>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center py-2 border-b border-gray-700">
-                    <span className="text-gray-400 text-sm">Linear Reg</span>
-                    <span className="text-white font-mono">{formatPrice(prediction.details.models.LinearRegression)}</span>
+                  <div className="flex justify-between items-center py-2 border-b border-gray-300">
+                    <span className="text-gray-600 text-sm">Linear Reg</span>
+                    <span className="text-gray-900 font-mono">{formatPrice(prediction.details.models.LinearRegression)}</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-700">
-                    <span className="text-gray-400 text-sm flex items-center gap-2">
+                  <div className="flex justify-between items-center py-2 border-b border-gray-300">
+                    <span className="text-gray-600 text-sm flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-blue-500"></div>
                       XGBoost
                     </span>
-                    <span className="text-white font-mono">{formatPrice(prediction.details.models.XGBoost)}</span>
+                    <span className="text-gray-900 font-mono">{formatPrice(prediction.details.models.XGBoost)}</span>
                   </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-700">
-                    <span className="text-gray-400 text-sm flex items-center gap-2">
+                  <div className="flex justify-between items-center py-2 border-b border-gray-300">
+                    <span className="text-gray-600 text-sm flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-purple-500"></div>
                       LSTM (Deep Learning)
                     </span>
-                    <span className="text-white font-mono">
+                    <span className="text-gray-900 font-mono">
                       {prediction.details.models.LSTM !== "Failed"
                         ? formatPrice(prediction.details.models.LSTM)
-                        : <span className="text-red-400 text-xs">Model Loading...</span>
+                        : <span className="text-red-600 text-xs">Model Loading...</span>
                       }
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-6 bg-gray-950/50 p-3 rounded-lg text-xs text-gray-400 leading-relaxed">
-                  <span className="font-bold text-gray-300">Analysis:</span> The ensemble model predicts a
-                  <span className={prediction.direction === 'UP' ? 'text-green-400 mx-1' : 'text-red-400 mx-1'}>
+                <div className="mt-6 bg-white/70 p-3 rounded-lg text-xs text-gray-600 leading-relaxed border border-gray-200">
+                  <span className="font-bold text-gray-800">Analysis:</span> The ensemble model predicts a
+                  <span className={prediction.direction === 'UP' ? 'text-green-600 mx-1' : 'text-red-600 mx-1'}>
                     {prediction.expected_change_pct} move {prediction.direction}
                   </span>
                   based on current momentum and {interval} technical indicators.
@@ -310,12 +310,12 @@ const StocksDashboard = () => {
               </div>
 
               {/* Strategy Tip */}
-              <div className="bg-blue-900/10 border border-blue-800 p-4 rounded-xl">
-                <h4 className="text-blue-400 font-bold text-sm mb-2 flex items-center gap-2">
+              <div className="bg-blue-50 border border-blue-300 p-4 rounded-xl">
+                <h4 className="text-blue-700 font-bold text-sm mb-2 flex items-center gap-2">
                   <AlertCircle size={16} />
                   Trading Signal
                 </h4>
-                <p className="text-gray-300 text-sm">
+                <p className="text-gray-700 text-sm">
                   {prediction.direction === 'UP'
                     ? `Strong buy pressure detected. Look for entry points near ${formatPrice(prediction.current_price * 0.995)}.`
                     : `Bearish momentum active. Consider setting stop-losses or waiting for a reversal.`
@@ -330,8 +330,8 @@ const StocksDashboard = () => {
         {/* --- EMPTY STATE --- */}
         {!stockData && !loading && !error && (
           <div className="text-center py-20 opacity-50">
-            <Activity size={48} className="mx-auto mb-4 text-gray-600" />
-            <p className="text-xl text-gray-400">Enter a stock symbol to generate AI predictions</p>
+            <Activity size={48} className="mx-auto mb-4 text-gray-400" />
+            <p className="text-xl text-gray-500">Enter a stock symbol to generate AI predictions</p>
           </div>
         )}
       </div>
