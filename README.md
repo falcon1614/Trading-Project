@@ -40,7 +40,7 @@ uvicorn app.main:app --reload
 
 ---
 
-## 🌐 Frontend Setup (React/Vite/Next.js)
+## 🌐 Frontend Setup (React)
 
 The frontend manages UI components and state. Ensure you have **Node.js** installed.
 
