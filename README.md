@@ -1,6 +1,7 @@
 ---
 
 # 🚀 Project Setup Guide
+![alt text](image.png)
 
 ## 🖥️ Backend Setup (FastAPI)
 
