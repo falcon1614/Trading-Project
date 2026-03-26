@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   AreaChart, Area
@@ -36,15 +36,19 @@ const FuturisticStocksDashboard = () => {
     return () => clearInterval(scanlineInterval);
   }, []);
 
-  const fetchStockData = async () => {
+  // Fetch stock data and prediction from backend
+  const fetchStockData = useCallback(async (sym, intv) => {
+    // Guard against undefined or empty symbol/interval
+    if (!sym || !intv) return;
+
     setLoading(true);
     setError(null);
     try {
-      const historyRes = await fetch(`http://localhost:8000/api/stock/${symbol}?interval=${interval}`);
+      const historyRes = await fetch(`http://localhost:8000/api/stock/${sym}?interval=${intv}`);
       if (!historyRes.ok) throw new Error(`Failed to fetch history (${historyRes.status})`);
       const historyJson = await historyRes.json();
 
-      const predictRes = await fetch(`http://localhost:8000/api/predict/${symbol}?interval=${interval}`);
+      const predictRes = await fetch(`http://localhost:8000/api/predict/${sym}?interval=${intv}`);
       if (!predictRes.ok) throw new Error(`Failed to fetch prediction (${predictRes.status})`);
       const predictJson = await predictRes.json();
 
@@ -56,19 +60,23 @@ const FuturisticStocksDashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // When category changes, set the first popular symbol of that category
   useEffect(() => {
     setSymbol(POPULAR_SYMBOLS[category][0]);
   }, [category]);
 
-  // Fetch data when symbol or interval changes
+  // Auto‑fetch when symbol or interval changes
   useEffect(() => {
-    if (symbol) {
-      fetchStockData();
+    if (symbol && interval) {
+      fetchStockData(symbol, interval);
     }
-  }, [symbol, interval]);
+  }, [symbol, interval, fetchStockData]);
+
+  const handleManualFetch = () => {
+    fetchStockData(symbol, interval);
+  };
 
   const formatPrice = (price) => {
     if (price === null || price === undefined) return 'N/A';
@@ -84,13 +92,13 @@ const FuturisticStocksDashboard = () => {
     return stockData.data[stockData.data.length - 1][key];
   };
 
-  // Tick formatter function - moved outside JSX to prevent recreation
+  // Format X‑axis ticks based on selected interval
   const formatXAxisTick = (str) => {
     if (!str) return '';
     const date = new Date(str);
     return interval && (interval.includes('m') || interval.includes('h'))
-      ? date.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
-      : date.toLocaleDateString([], {month:'short', day:'numeric'});
+      ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      : date.toLocaleDateString([], { month: 'short', day: 'numeric' });
   };
 
   const timeframes = [
@@ -284,7 +292,7 @@ const FuturisticStocksDashboard = () => {
                   type="text"
                   value={symbol}
                   onChange={(e) => setSymbol(e.target.value.toUpperCase())}
-                  onKeyDown={(e) => e.key === 'Enter' && fetchStockData()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleManualFetch()}
                   className="w-full bg-black/50 border border-cyan-500/50 rounded-lg py-3 pl-12 pr-4 text-cyan-100 placeholder-cyan-700 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/50 backdrop-blur-sm"
                   placeholder="ENTER SYMBOL"
                 />
@@ -314,7 +322,7 @@ const FuturisticStocksDashboard = () => {
 
             {/* Analyze Button */}
             <button
-              onClick={fetchStockData}
+              onClick={handleManualFetch}
               disabled={loading}
               className="cyber-button w-full md:w-auto flex items-center justify-center gap-3 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 text-black px-8 py-3 rounded-lg font-bold transition-all hover:shadow-2xl hover:shadow-cyan-500/50 disabled:opacity-50 disabled:cursor-not-allowed"
             >
@@ -333,14 +341,19 @@ const FuturisticStocksDashboard = () => {
           </div>
         </div>
 
-        {/* Error Display */}
+        {/* Error Display – enhanced with ad‑blocker hint */}
         {error && (
           <div className="hologram-border rounded-xl p-4 bg-red-900/20 border-red-500 backdrop-blur-sm">
             <div className="flex items-center gap-3 text-red-400">
               <AlertCircle size={24} />
               <div>
-                <div className="text-xs tracking-widest">SYSTEM ERROR</div>
-                <div className="text-sm">{error}</div>
+                <div className="text-xs tracking-widest font-bold">SYSTEM ERROR</div>
+                <div className="text-sm mt-1">{error}</div>
+                {error.includes('Failed to fetch') && (
+                  <div className="text-xs text-yellow-400 mt-2 p-2 border border-yellow-400 rounded">
+                    ⚠️ Request blocked – disable your ad blocker for localhost, or run the app in incognito mode.
+                  </div>
+                )}
               </div>
             </div>
           </div>
